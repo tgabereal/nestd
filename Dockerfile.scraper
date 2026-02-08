@@ -1,0 +1,17 @@
+# HouseWipe Scraper Dockerfile
+FROM mcr.microsoft.com/playwright:v1.48.0-noble
+
+WORKDIR /app
+
+# Copy package files
+COPY scraper/package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source
+COPY scraper/src ./src
+COPY scraper/.env* ./
+
+# Run scraper on schedule
+CMD ["node", "src/index.js", "schedule"]

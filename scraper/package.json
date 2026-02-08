@@ -1,0 +1,30 @@
+{
+  "name": "nestd-scraper",
+  "version": "1.0.0",
+  "description": "Nestd Realtor.ca scraper",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js schedule",
+    "scrape": "node src/index.js once",
+    "init-db": "node src/index.js init-db"
+  },
+  "keywords": [
+    "realtor",
+    "scraper",
+    "real-estate"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "node-cron": "^4.2.1",
+    "pg": "^8.18.0",
+    "playwright": "^1.58.2",
+    "playwright-extra": "^4.3.6",
+    "puppeteer": "^24.37.2",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "rebrowser-patches": "^1.0.19"
+  }
+}

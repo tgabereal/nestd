@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: housewipe
+      POSTGRES_USER: housewipe
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-localdev123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U housewipe"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # API Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://housewipe:${DB_PASSWORD:-localdev123}@db:5432/housewipe
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+      - FRONTEND_URL=http://localhost:5173
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Scraper (optional, runs on demand or schedule)
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile.scraper
+    environment:
+      - DATABASE_URL=postgresql://housewipe:${DB_PASSWORD:-localdev123}@db:5432/housewipe
+      - WEBSHARE_USER=${WEBSHARE_USER}
+      - WEBSHARE_PASS=${WEBSHARE_PASS}
+      - GEOAPIFY_API_KEY=${GEOAPIFY_API_KEY}
+      - HEADLESS=true
+    depends_on:
+      db:
+        condition: service_healthy
+    # Don't start by default - run manually with: docker compose run scraper npm run scrape
+    profiles:
+      - scraper
+
+volumes:
+  postgres_data:

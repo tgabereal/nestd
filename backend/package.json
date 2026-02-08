@@ -1,0 +1,23 @@
+{
+  "name": "nestd-api",
+  "version": "1.0.0",
+  "description": "Nestd API server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": ["api", "real-estate"],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@clerk/express": "^1.7.69",
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "pg": "^8.18.0"
+  }
+}
