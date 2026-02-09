@@ -611,9 +611,9 @@ app.get('/api/me', requireAuth(), withUser, async (req, res) => {
   res.json(req.dbUser);
 });
 
-// ============ SERVER-SIDE SCRAPER ============
-const scraperServer = require('./routes/scraper-server');
-app.use('/api/scraper-server', scraperServer);
+// ============ SERVER-SIDE SCRAPER (DISABLED - runs as separate service) ============
+// const scraperServer = require('./routes/scraper-server');
+// app.use('/api/scraper-server', scraperServer);
 
 // Error handler
 app.use((err, req, res, next) => {
