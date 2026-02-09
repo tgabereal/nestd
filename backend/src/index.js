@@ -1,5 +1,5 @@
 /**
- * HouseWipe Backend API
+ * Nestd Backend API
  * Express server with Clerk authentication
  */
 
@@ -10,6 +10,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const { clerkMiddleware, requireAuth, getAuth } = require('@clerk/express');
 const { Pool } = require('pg');
+const { schema } = require('./migrate');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -20,11 +21,32 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
+// Auto-run migrations on startup
+async function initDatabase() {
+  try {
+    console.log('🔄 Checking database tables...');
+    const result = await pool.query(`
+      SELECT table_name FROM information_schema.tables 
+      WHERE table_schema = 'public' AND table_name = 'listings'
+    `);
+    
+    if (result.rows.length === 0) {
+      console.log('📦 Running database migrations...');
+      await pool.query(schema);
+      console.log('✅ Database initialized successfully!');
+    } else {
+      console.log('✅ Database tables already exist');
+    }
+  } catch (error) {
+    console.error('❌ Database initialization error:', error.message);
+  }
+}
+
 // Middleware
 app.use(helmet());
 app.use(compression());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || '*',
   credentials: true,
 }));
 app.use(express.json());
@@ -595,7 +617,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
-app.listen(port, () => {
-  console.log(`🚀 HouseWipe API running on port ${port}`);
+// Start server with database initialization
+initDatabase().then(() => {
+  app.listen(port, () => {
+    console.log(`🚀 Nestd API running on port ${port}`);
+  });
 });
