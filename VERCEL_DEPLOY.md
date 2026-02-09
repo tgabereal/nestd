@@ -4,6 +4,7 @@
 - Database: PostgreSQL with 7 tables deployed on Railway
 - Backend: Express API deployed at https://nestd-production.up.railway.app
 - Code: Pushed to https://github.com/tgabereal/nestd
+- Config: Added `vercel.json` in repo root
 
 ## 🚀 Manual Vercel Deployment Steps
 
@@ -13,10 +14,11 @@
 3. Find and select the `tgabereal/nestd` repository
 
 ### Step 2: Configure Project
-- **Framework Preset**: Vite
-- **Root Directory**: `/frontend`
-- **Build Command**: `npm run build` (or `vite build`)
-- **Output Directory**: `dist`
+If Vercel doesn't auto-detect settings, use these:
+- **Framework Preset**: `Vite` or `Other`
+- **Root Directory**: (leave empty, use root - since vercel.json is there)
+- **Build Command**: `cd frontend && npm install && npm run build`
+- **Output Directory**: `frontend/dist`
 
 ### Step 3: Environment Variables
 Add these environment variables:
