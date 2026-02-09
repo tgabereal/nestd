@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { motion, useMotionValue, useTransform, type PanInfo } from 'framer-motion';
 import { Heart, X, Star, MapPin, Bed, Bath, Ruler, ExternalLink } from 'lucide-react';
 import type { Listing } from '../types';
 
@@ -99,7 +99,7 @@ export function SwipeCard({ listing, onSwipe, isTop }: SwipeCardProps) {
                 src={images[currentImageIndex]}
                 alt={listing.street}
                 className="w-full h-full object-cover"
-                onError={(e) => {
+                onError={(_e) => {
                   // Try next image on error
                   if (currentImageIndex < images.length - 1) {
                     setCurrentImageIndex(currentImageIndex + 1);
