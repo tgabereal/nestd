@@ -1,0 +1,15 @@
+[deploy]
+# Default service uses backend
+
+[[services]]
+name = "nestd"
+root = "backend"
+buildCommand = "npm install"
+startCommand = "npm start"
+
+[[services]]
+name = "scraper"
+root = "."
+dockerfilePath = "Dockerfile.scraper"
+buildCommand = "docker build -f Dockerfile.scraper -t scraper ."
+startCommand = "docker run -e DATABASE_URL=$DATABASE_URL -e WEBSHARE_USER=$WEBSHARE_USER -e WEBSHARE_PASS=$WEBSHARE_PASS scraper"
